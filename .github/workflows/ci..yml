@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cpp-tests:
+    name: C++ unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build test image
+        run: docker build -f Dockerfile.test -t imt-test .
+
+      - name: Run tests
+        run: docker run --rm imt-test sh -c "cd build/tests && ./run_tests"
